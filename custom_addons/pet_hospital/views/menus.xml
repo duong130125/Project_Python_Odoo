@@ -1,0 +1,80 @@
+<odoo>
+    <record id="action_pet_pet" model="ir.actions.act_window">
+        <field name="name">Pets</field>
+        <field name="res_model">pet.pet</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first pet
+            </p>
+        </field>
+    </record>
+
+    <record id="action_pet_type" model="ir.actions.act_window">
+        <field name="name">Pet Types</field>
+        <field name="res_model">pet.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_pet_breed" model="ir.actions.act_window">
+        <field name="name">Pet Breeds</field>
+        <field name="res_model">pet.breed</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_pet_booking" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">pet.booking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first booking
+            </p>
+        </field>
+    </record>
+
+    <record id="action_pet_appointment_tree" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">pet.appointment</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    <menuitem id="menu_pet_hospital_root"
+              name="Pet Hospital"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_pet"
+              name="Pets"
+              parent="menu_pet_hospital_root"
+              action="action_pet_pet"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_configuration"
+              name="Configuration"
+              parent="menu_pet_hospital_root"
+              sequence="20"/>
+
+    <menuitem id="menu_pet_type"
+              name="Pet Types"
+              parent="menu_pet_configuration"
+              action="action_pet_type"
+              sequence="10"/>
+
+    <menuitem id="menu_pet_breed"
+              name="Pet Breeds"
+              parent="menu_pet_configuration"
+              action="action_pet_breed"
+              sequence="20"/>
+
+    <menuitem id="menu_pet_booking"
+              name="Bookings"
+              parent="menu_pet_hospital_root"
+              action="action_pet_booking"
+              sequence="5"/>
+
+    <menuitem id="menu_pet_appointment"
+              name="Appointments"
+              parent="menu_pet_hospital_root"
+              action="action_pet_appointment_tree"
+              sequence="6"/>
+</odoo>

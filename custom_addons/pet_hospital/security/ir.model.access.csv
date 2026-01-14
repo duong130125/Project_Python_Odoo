@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pet_pet,pet.pet,model_pet_pet,base.group_user,1,1,1,1
+access_pet_type,pet.type,model_pet_type,base.group_user,1,1,1,1
+access_pet_breed,pet.breed,model_pet_breed,base.group_user,1,1,1,1
+access_pet_booking,pet.booking,model_pet_booking,base.group_user,1,1,1,1
+access_pet_booking_line,pet.booking.line,model_pet_booking_line,base.group_user,1,1,1,1
+access_pet_vaccination,pet.vaccination,model_pet_vaccination,base.group_user,1,1,1,1
+access_pet_medical_history,pet.medical.history,model_pet_medical_history,base.group_user,1,1,1,1
+access_pet_appointment,pet.appointment,model_pet_appointment,base.group_user,1,1,1,1
