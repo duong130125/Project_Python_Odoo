@@ -5,23 +5,65 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_medical_history" type="object" class="oe_stat_button" icon="fa-stethoscope">
+                            <field name="medical_count" widget="statinfo" string="Medical History"/>
+                        </button>
+                        <button name="action_view_bookings" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="booking_count" widget="statinfo" string="Bookings"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Pet Name"/>
+                        </h1>
+                        <h3>
+                            <field name="code"/>
+                        </h3>
+                    </div>
                     <group>
-                        <field name="image" widget="image"/>
-                        <field name="name"/>
-                        <field name="dob"/>
-                        <field name="age" readonly="1"/>
+                        <group>
+                            <field name="dob"/>
+                            <field name="age" readonly="1"/>
+                        </group>
+                        <group string="Owner Information">
+                            <field name="owner_id"/>
+                            <field name="owner_phone" readonly="1"/>
+                            <field name="owner_address" readonly="1"/>
+                        </group>
+                        <group string="Pet Classification">
+                            <field name="type_id"/>
+                            <field name="breed_id"/>
+                        </group>
+                        <group string="Stats">
+                            <field name="spa_count"/>
+                        </group>
                     </group>
-
-                    <group string="Owner Information">
-                        <field name="owner_id"/>
-                        <field name="owner_phone" readonly="1"/>
-                        <field name="owner_address" readonly="1"/>
-                    </group>
-
-                    <group string="Pet Classification">
-                        <field name="type_id"/>
-                        <field name="breed_id"/>
-                    </group>
+                    <notebook>
+                        <page string="General Information">
+                            <group>
+                            </group>
+                        </page>
+                        <page string="Vaccinations">
+                            <field name="vaccination_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="next_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Medical History">
+                            <field name="medical_history_ids">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="doctor_id"/>
+                                    <field name="diagnosis"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -32,11 +74,13 @@
         <field name="model">pet.pet</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="code"/>
                 <field name="name"/>
                 <field name="owner_id"/>
                 <field name="type_id"/>
                 <field name="breed_id"/>
                 <field name="age"/>
+                <field name="spa_count"/>
             </tree>
         </field>
     </record>
@@ -60,6 +104,9 @@
                                 <strong>
                                     <field name="name"/>
                                 </strong>
+                                <div>
+                                    <field name="code"/>
+                                </div>
                                 <div>
                                     <field name="breed_id"/>
                                 </div>

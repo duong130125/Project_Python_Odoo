@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from datetime import date
 
 class PetBooking(models.Model):
@@ -20,6 +20,7 @@ class PetBooking(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
+        ('in_progress', 'In Progress'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, default='draft', tracking=True)
@@ -29,6 +30,27 @@ class PetBooking(models.Model):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('pet.booking') or 'New'
         return super(PetBooking, self).create(vals)
+
+    def action_confirm(self):
+        self.write({'state': 'confirmed'})
+
+    def action_start_work(self):
+        self.write({'state': 'in_progress'})
+
+    def action_done(self):
+        for booking in self:
+            booking.write({'state': 'done'})
+            if booking.pet_id:
+                booking.pet_id.spa_count += 1
+
+    def action_cancel(self):
+        for booking in self:
+            if booking.state != 'draft':
+                raise UserError(_("Only Draft bookings can be cancelled!"))
+            booking.write({'state': 'cancel'})
+
+    def action_draft(self):
+        self.write({'state': 'draft'})
 
     @api.depends('booking_line_ids.price_subtotal')
     def _compute_amount(self):

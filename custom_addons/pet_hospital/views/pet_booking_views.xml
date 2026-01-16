@@ -20,9 +20,14 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start_work" string="Start Work" type="object" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_done" string="Done" type="object" class="oe_highlight" invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ['draft', 'confirmed']"/>
+                    <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,done"/>
                 </header>
-                <sheet>
+                <sheet readonly="state == 'done'">
                     <div class="oe_title">
                         <h1>
                             <field name="name" readonly="1"/>
@@ -39,7 +44,7 @@
                     </group>
                     <notebook>
                         <page string="Services">
-                            <field name="booking_line_ids" widget="section_and_note_one2many">
+                            <field name="booking_line_ids" widget="section_and_note_one2many" readonly="state == 'done'">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
                                     <field name="name"/>
@@ -63,6 +68,28 @@
         </field>
     </record>
 
+    <record id="view_pet_booking_pivot" model="ir.ui.view">
+        <field name="name">pet.booking.pivot</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <pivot string="Revenue Analysis">
+                <field name="booking_date" type="row"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_pet_booking_graph" model="ir.ui.view">
+        <field name="name">pet.booking.graph</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <graph string="Revenue by Pet" type="bar">
+                <field name="pet_id"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
     <record id="view_pet_booking_search" model="ir.ui.view">
         <field name="name">pet.booking.search</field>
         <field name="model">pet.booking</field>
@@ -71,12 +98,15 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="pet_id"/>
+                <filter string="Today" name="today" domain="[('booking_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Unpaid" name="unpaid" domain="[('state', '!=', 'done')]"/>
                 <filter string="My Bookings" name="my_bookings" domain="[('create_uid', '=', uid)]"/>
                 <group expand="0" string="Group By">
-                    <filter string="Appoint Date" name="groupby_date" context="{'group_by': 'booking_date'}"/>
+                    <filter string="Booking Date" name="groupby_date" context="{'group_by': 'booking_date'}"/>
                     <filter string="Customer" name="groupby_customer" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Pet" name="groupby_pet" context="{'group_by': 'pet_id'}"/>
                 </group>
             </search>
         </field>

@@ -11,6 +11,7 @@ Long description of module's purpose
     'version': '0.1',
     'depends': ['base', 'product', 'mail'],
     'data': [
+        'security/pet_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
         'views/pet_views.xml',
@@ -18,6 +19,7 @@ Long description of module's purpose
         'views/pet_appointment_views.xml',
         'views/res_partner_views.xml',
         'views/product_views.xml',
+        'data/demo_data.xml',
         'views/menus.xml',
     ],
     'demo': [

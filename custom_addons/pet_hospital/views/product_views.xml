@@ -11,6 +11,9 @@
                     </group>
                 </page>
             </xpath>
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="groups">pet_hospital.group_pet_manager</attribute>
+            </xpath>
         </field>
     </record>
 </odoo>

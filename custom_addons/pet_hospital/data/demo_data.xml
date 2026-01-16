@@ -1,0 +1,74 @@
+<odoo>
+    <data noupdate="1">
+        <record id="partner_demo_1" model="res.partner">
+            <field name="name">Nguyễn Văn An</field>
+            <field name="phone">0901234567</field>
+            <field name="street">123 Lê Lợi, Quận 1</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_2" model="res.partner">
+            <field name="name">Trần Thị Bình</field>
+            <field name="phone">0912345678</field>
+            <field name="street">456 Nguyễn Huệ, Quận 1</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_3" model="res.partner">
+            <field name="name">Lê Văn Cường</field>
+            <field name="phone">0923456789</field>
+            <field name="street">789 Trần Hưng Đạo, Quận 5</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_4" model="res.partner">
+            <field name="name">Phạm Thị Dung</field>
+            <field name="phone">0934567890</field>
+            <field name="street">12 Pasteur, Quận 3</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_5" model="res.partner">
+            <field name="name">Hoàng Văn Em</field>
+            <field name="phone">0945678901</field>
+            <field name="street">89 Cách Mạng Tháng 8, Quận 10</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_6" model="res.partner">
+            <field name="name">Võ Thị Hạnh</field>
+            <field name="phone">0956789012</field>
+            <field name="street">34 Phan Xích Long, Phú Nhuận</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_7" model="res.partner">
+            <field name="name">Đặng Văn Khoa</field>
+            <field name="phone">0967890123</field>
+            <field name="street">56 Nguyễn Thị Minh Khai, Quận 3</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_8" model="res.partner">
+            <field name="name">Bùi Thị Lan</field>
+            <field name="phone">0978901234</field>
+            <field name="street">101 Võ Văn Tần, Quận 3</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_9" model="res.partner">
+            <field name="name">Ngô Văn Minh</field>
+            <field name="phone">0989012345</field>
+            <field name="street">202 Lý Thường Kiệt, Quận 11</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+        <record id="partner_demo_10" model="res.partner">
+            <field name="name">Dương Thị Ngọc</field>
+            <field name="phone">0990123456</field>
+            <field name="street">15 Nguyễn Văn Đậu, Bình Thạnh</field>
+            <field name="city">Hồ Chí Minh</field>
+        </record>
+
+    </data>
+</odoo>
