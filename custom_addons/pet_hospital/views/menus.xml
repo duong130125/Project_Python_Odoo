@@ -2,7 +2,7 @@
     <record id="action_pet_pet" model="ir.actions.act_window">
         <field name="name">Pets</field>
         <field name="res_model">pet.pet</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first pet
@@ -25,7 +25,7 @@
     <record id="action_pet_booking" model="ir.actions.act_window">
         <field name="name">Bookings</field>
         <field name="res_model">pet.booking</field>
-        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first booking
@@ -36,7 +36,7 @@
     <record id="action_pet_appointment_tree" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">pet.appointment</field>
-        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_mode">calendar,kanban,tree,form</field>
     </record>
 
     <menuitem id="menu_pet_hospital_root"

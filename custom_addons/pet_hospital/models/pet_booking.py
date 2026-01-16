@@ -32,6 +32,9 @@ class PetBooking(models.Model):
         return super(PetBooking, self).create(vals)
 
     def action_confirm(self):
+        for booking in self:
+            if not booking.booking_line_ids:
+                raise UserError(_("You cannot confirm a booking without any services!"))
         self.write({'state': 'confirmed'})
 
     def action_start_work(self):
@@ -99,3 +102,9 @@ class PetBookingLine(models.Model):
         for line in self:
             if line.product_uom_qty <= 0:
                 raise ValidationError("Quantity must be greater than 0.")
+    
+    def unlink(self):
+        for booking in self:
+            if booking.state not in ('draft', 'cancel'):
+                raise UserError(_("You cannot delete a booking that is not in Draft or Cancelled state."))
+        return super(PetBooking, self).unlink()

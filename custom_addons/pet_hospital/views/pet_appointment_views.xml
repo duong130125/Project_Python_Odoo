@@ -10,12 +10,49 @@
         </field>
     </record>
 
+    <record id="view_pet_appointment_kanban" model="ir.ui.view">
+        <field name="name">pet.appointment.kanban</field>
+        <field name="model">pet.appointment</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column" quick_create="false">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="pet_id"/>
+                <field name="partner_id"/>
+                <field name="date_start"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click oe_kanban_card">
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <small><i class="fa fa-clock-o" title="Time"/> <field name="date_start"/></small>
+                                </div>
+                                <div>
+                                    <span class="badge rounded-pill text-bg-light"><field name="pet_id"/></span>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="partner_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="view_pet_appointment_form" model="ir.ui.view">
         <field name="name">pet.appointment.form</field>
         <field name="model">pet.appointment</field>
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_done" string="Done" type="object" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ['draft', 'confirmed']"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
                 </header>
                 <sheet>
@@ -44,12 +81,12 @@
         <field name="name">pet.appointment.tree</field>
         <field name="model">pet.appointment</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state == 'confirmed'" decoration-muted="state == 'done'">
-                <field name="name"/>
+            <tree decoration-info="state == 'confirmed'" decoration-success="state == 'done'" decoration-muted="state == 'draft'" decoration-danger="state == 'cancel'">
+                <field name="name" decoration-bf="1"/>
                 <field name="date_start"/>
                 <field name="pet_id"/>
                 <field name="partner_id"/>
-                <field name="state"/>
+                <field name="state" widget="badge" decoration-info="state == 'confirmed'" decoration-success="state == 'done'" decoration-muted="state == 'draft'" decoration-danger="state == 'cancel'"/>
             </tree>
         </field>
     </record>

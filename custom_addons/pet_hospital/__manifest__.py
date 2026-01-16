@@ -8,7 +8,7 @@ Long description of module's purpose
     'author': "Dương",
     'website': "https://www.yourcompany.com",
     'category': 'Uncategorized',
-    'version': '0.1',
+    'version': '0.2',
     'depends': ['base', 'product', 'mail'],
     'data': [
         'security/pet_security.xml',

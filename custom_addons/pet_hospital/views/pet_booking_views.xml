@@ -3,14 +3,56 @@
         <field name="name">pet.booking.tree</field>
         <field name="model">pet.booking</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+            <tree decoration-info="state == 'confirmed'" decoration-warning="state == 'in_progress'" decoration-success="state == 'done'" decoration-muted="state == 'draft'" decoration-danger="state == 'cancel'">
                 <field name="name"/>
                 <field name="booking_date"/>
                 <field name="partner_id"/>
                 <field name="pet_id"/>
-                <field name="amount_total" widget="monetary"/>
-                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'confirmed'"/>
+                <field name="amount_total" widget="monetary" decoration-bf="1"/>
+                <field name="state" widget="badge" decoration-info="state == 'confirmed'" decoration-warning="state == 'in_progress'" decoration-success="state == 'done'" decoration-muted="state == 'draft'" decoration-danger="state == 'cancel'"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="view_pet_booking_kanban" model="ir.ui.view">
+        <field name="name">pet.booking.kanban</field>
+        <field name="model">pet.booking</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="amount_total"/>
+                <field name="booking_date"/>
+                <field name="state"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="row mb4">
+                                <div class="col-6">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong><field name="amount_total" widget="monetary"/></strong>
+                                </div>
+                            </div>
+                            <div class="row mb4">
+                                <div class="col-12">
+                                    <span><field name="partner_id"/></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <field name="booking_date"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'cancel': 'danger', 'confirmed': 'info', 'in_progress': 'warning', 'done': 'success'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 

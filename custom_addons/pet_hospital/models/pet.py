@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 from datetime import date
 
 class PetPet(models.Model):
@@ -84,3 +85,9 @@ class PetPet(models.Model):
                 pet.age = 0
 
 
+    @api.constrains('dob')
+    def _check_dob(self):
+        today = fields.Date.today()
+        for pet in self:
+            if pet.dob and pet.dob > today:
+                raise ValidationError("Date of birth cannot be in the future!")
