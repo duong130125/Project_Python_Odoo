@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 class PetPet(models.Model):
     _name = 'pet.pet'
@@ -78,9 +79,7 @@ class PetPet(models.Model):
         for pet in self:
             if pet.dob:
                 today = date.today()
-                pet.age = today.year - pet.dob.year - (
-                    (today.month, today.day) < (pet.dob.month, pet.dob.day)
-                )
+                pet.age = relativedelta(today, pet.dob).years
             else:
                 pet.age = 0
 

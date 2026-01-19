@@ -169,17 +169,28 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_title">
+                        <label for="diagnosis" string="Diagnosis / Condition"/>
+                        <h1>
+                            <field name="diagnosis" placeholder="e.g. Broken Leg, Flu..."/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="diagnosis"/>
-                            <field name="date"/>
+                            <span class="o_form_label o_td_label" name="doctor_name">
+                                <b>Attending Doctor</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="doctor_id" widget="res_partner_many2one" context="{'show_address': 1}" placeholder="Select Doctor"/>
+                            </div>
                         </group>
                         <group>
-                            <field name="doctor_id"/>
-                            <field name="pet_id"/>
+                            <field name="date"/>
+                            <field name="pet_id" widget="many2one_avatar"/>
                         </group>
                     </group>
-                    <field name="description" placeholder="Treatment Description..."/>
+                    <separator string="Treatment Plan &amp; Notes"/>
+                    <field name="description" placeholder="Detailed treatment description, medication prescribed, and follow-up instructions..." style="min-height: 100px;"/>
                 </sheet>
             </form>
         </field>

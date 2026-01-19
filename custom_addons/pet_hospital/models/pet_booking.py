@@ -29,7 +29,15 @@ class PetBooking(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('pet.booking') or 'New'
-        return super(PetBooking, self).create(vals)
+        
+        res = super(PetBooking, self).create(vals)
+        
+        if res.booking_date and res.booking_date < date.today():
+            if res.booking_line_ids:
+                res.action_confirm()
+                res.action_done()
+        
+        return res
 
     def action_confirm(self):
         for booking in self:
@@ -60,11 +68,25 @@ class PetBooking(models.Model):
         for order in self:
             order.amount_total = sum(line.price_subtotal for line in order.booking_line_ids)
 
-    @api.constrains('booking_date')
-    def _check_booking_date(self):
-        for record in self:
-            if record.booking_date and record.booking_date < date.today():
-                raise ValidationError("Booking date cannot be in the past!")
+    def unlink(self):
+        for booking in self:
+            if booking.state in ['done', 'cancel']:
+                raise UserError(_("You cannot delete a booking that is already Done or Cancelled."))
+        return super(PetBooking, self).unlink()
+
+    def write(self, vals):
+        if 'state' in vals:
+            pass
+        else:
+            for booking in self:
+                if booking.state in ['done', 'cancel']:
+                    raise UserError(_("You cannot modify a booking that is already Done or Cancelled."))
+        
+        for booking in self:
+            if booking.state in ['done', 'cancel']:
+                 raise UserError(_("You cannot modify or change state of a booking that is already Done or Cancelled."))
+
+        return super(PetBooking, self).write(vals)
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
@@ -103,8 +125,22 @@ class PetBookingLine(models.Model):
             if line.product_uom_qty <= 0:
                 raise ValidationError("Quantity must be greater than 0.")
     
+    @api.model
+    def create(self, vals):
+        if 'booking_id' in vals:
+            booking = self.env['pet.booking'].browse(vals['booking_id'])
+            if booking.state in ['done', 'cancel']:
+                raise UserError(_("You cannot add lines to a Done or Cancelled booking."))
+        return super(PetBookingLine, self).create(vals)
+
+    def write(self, vals):
+        for line in self:
+            if line.booking_id.state in ['done', 'cancel']:
+                raise UserError(_("You cannot modify lines of a Done or Cancelled booking."))
+        return super(PetBookingLine, self).write(vals)
+
     def unlink(self):
-        for booking in self:
-            if booking.state not in ('draft', 'cancel'):
-                raise UserError(_("You cannot delete a booking that is not in Draft or Cancelled state."))
-        return super(PetBooking, self).unlink()
+        for line in self:
+            if line.booking_id.state in ['done', 'cancel']:
+                 raise UserError(_("You cannot delete lines from a Done or Cancelled booking."))
+        return super(PetBookingLine, self).unlink()

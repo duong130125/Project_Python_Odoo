@@ -11,12 +11,16 @@ class PetAppointment(models.Model):
     date_start = fields.Datetime(string='Start Time', required=True)
     date_end = fields.Datetime(string='End Time', required=True)
     description = fields.Text(string='Description')
+    @api.model
+    def _expand_states(self, states, domain, order):
+        return [key for key, val in type(self).state.selection]
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
-    ], string='Status', default='draft')
+    ], string='Status', default='draft', group_expand='_expand_states')
 
     def action_confirm(self):
         self.write({'state': 'confirmed'})
@@ -31,7 +35,14 @@ class PetAppointment(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('pet.appointment') or 'New'
-        return super(PetAppointment, self).create(vals)
+        
+        res = super(PetAppointment, self).create(vals)
+
+        if res.date_start and res.date_start < fields.Datetime.now():
+            res.action_confirm()
+            res.action_done()
+            
+        return res
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):
@@ -39,8 +50,6 @@ class PetAppointment(models.Model):
             if record.date_start and record.date_end:
                  if record.date_start >= record.date_end:
                     raise ValidationError("End Date must be after Start Date!")
-                 if record.date_start < fields.Datetime.now():
-                    raise ValidationError("Appointment cannot be in the past!")
                  
                  domain = [
                      ('id', '!=', record.id),
@@ -54,6 +63,19 @@ class PetAppointment(models.Model):
 
     def unlink(self):
         for appointment in self:
-            if appointment.state == 'done':
-                raise UserError("You cannot delete an appointment that is already Done.")
+            if appointment.state in ['done', 'cancel']:
+                raise UserError("You cannot delete an appointment that is already Done or Cancelled.")
         return super(PetAppointment, self).unlink()
+
+    def write(self, vals):
+        for record in self:
+            if record.state in ['done', 'cancel']:
+                 raise UserError("You cannot modify an appointment that is already Done or Cancelled.")
+        
+        if 'state' in vals:
+            target_state = vals['state']
+            for record in self:
+                if record.state == 'draft' and target_state == 'done':
+                    raise UserError("You cannot skip the confirmation step. Please confirm the appointment first.")
+                    
+        return super(PetAppointment, self).write(vals)
